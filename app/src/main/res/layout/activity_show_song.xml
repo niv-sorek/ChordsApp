@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15px"
+    tools:context=".screens.ShowSong">
+
+    <TextView
+        android:id="@+id/song_TXT_songName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SongName"
+        android:textSize="35sp"
+        android:textStyle="bold"
+
+        />
+
+    <TextView
+        android:id="@+id/song_TXT_artistName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/song_TXT_songName"
+        android:text="ArtistName"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <RatingBar
+        android:id="@+id/song_RATE_rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/song_TXT_artistName"
+        android:padding="0dp"
+        android:progressTint="@color/black"
+        android:rating="3" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/song_RATE_rating">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20px"
+            android:layout_marginBottom="20px"
+            android:text="@string/lorem_ipsum" />
+    </ScrollView>
+
+</RelativeLayout>
