@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ImageView
+
+        android:id="@+id/splash_IMG_guitar"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:alpha="0.8"
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash_guitar_s" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/splash_TXT_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.1"
+            android:fontFamily="@font/ubuntu"
+            android:gravity="center"
+
+            android:scaleX="0.2"
+            android:scaleY="0.2"
+            android:text="A-Chord"
+            android:textColor="@color/black"
+            android:textSize="78sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</RelativeLayout>

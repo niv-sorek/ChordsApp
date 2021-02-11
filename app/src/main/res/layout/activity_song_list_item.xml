@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".screens.ShowArtist$SongListItem"
     android:paddingTop="10dp"
-    >
+    tools:context=".screens.ShowArtist$SongListItem">
 
     <ImageView
 
@@ -16,14 +15,14 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-
-        android:layout_marginStart="20dp"
+        android:layout_weight="1"
         android:id="@+id/songList_TXT_songName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:text="Song name"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/songList_TXT_artistName"

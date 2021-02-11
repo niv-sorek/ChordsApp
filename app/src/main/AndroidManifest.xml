@@ -12,17 +12,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicApp">
-        <activity android:name=".screens.SongListItem"></activity>
-        <activity android:name=".screens.ShowArtist$SongListItem" />
-        <activity android:name=".screens.WelcomeScreen" />
-        <activity android:name=".screens.ShowSong" />
-        <activity android:name=".screens.MainActivity">
+        <activity android:name=".screens.LoginActivity"/>
+        <activity android:name=".screens.MainActivity" />
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="false" />
+
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+               app to run.
+        -->
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".screens.Splash"
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".screens.SongListItem" />
+        <activity android:name=".screens.ShowArtist$SongListItem" />
+        <activity android:name=".screens.ShowSong" />
         <activity android:name=".screens.ShowArtist" />
     </application>
 

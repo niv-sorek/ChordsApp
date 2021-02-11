@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="15dp"
-    android:paddingEnd="15dp"
-    >
+    android:padding="30dp">
 
-    <ImageView
-        android:id="@+id/artist_IMG_avatar"
+    <ProgressBar
+        android:id="@+id/artist_SPN_spinner"
+        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50px"
-        android:layout_marginBottom="10px"
-        />
+        android:layout_centerInParent="true" />
 
-    <TextView
-        android:id="@+id/artist_TXT_artistName"
+    <LinearLayout
+
+        android:id="@+id/artist_LAY_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/artist_IMG_avatar"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:text="Artist Name"
-        android:textSize="35sp" />
+        android:orientation="vertical">
 
-    <RatingBar
-        android:id="@+id/artist_RATE_rating"
-        style="@style/Widget.AppCompat.RatingBar.Indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/artist_TXT_artistName"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+        <ImageView
+            android:id="@+id/artist_IMG_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp" />
 
-    <TextView
+        <TextView
+            android:id="@+id/artist_TXT_artistName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Artist Name"
+            android:textSize="35sp" />
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/artist_RATE_rating"
-        android:text="@string/top_songs"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        <RatingBar
+            android:id="@+id/artist_RATE_rating"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
-    <ListView
-        android:id="@+id/artist_LST_topSongs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/artist_RATE_rating" />
-</LinearLayout>
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/top_songs"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/artist_LST_topSongs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

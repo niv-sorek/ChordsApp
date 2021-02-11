@@ -1,55 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="30dp"
     tools:context=".screens.MainActivity">
 
-    <RelativeLayout
+
+    <ImageView
+        android:id="@+id/main_IMG_avatar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/user_s_profile_photo" />
+
+    <TextView
+        android:id="@+id/main_TXT_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_IMG_avatar"
+        android:text="Hello, Name" />
+
+    <TextView
+        android:id="@+id/main_TXT_topSongs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_TXT_greeting"
+        android:text="@string/top_songs"
+        android:textSize="45sp" />
+
+    <ListView
+        android:id="@+id/main_LST_topSongs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:layout_height="200dp"
+        android:layout_below="@+id/main_TXT_topSongs"
+        android:layout_marginTop="0dp"
+        android:dividerHeight="2dp"
+        android:scrollbars="none" />
 
-        <ImageView
-            android:id="@+id/main_IMG_avatar"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            tools:srcCompat="@tools:sample/avatars" />
+    <TextView
+        android:id="@+id/main_TXT_likedSongs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_LST_topSongs"
+        android:layout_marginTop="15dp"
+        android:text="@string/liked_songs"
+        android:textSize="45sp" />
 
-        <TextView
-            android:id="@+id/main_TXT_topSongs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/main_IMG_avatar"
-            android:text="@string/top_songs"
-            android:textSize="45sp" />
-
-        <ListView
-            android:id="@+id/main_LST_topSongs"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:dividerHeight="2px"
-            android:layout_below="@+id/main_TXT_topSongs"
-            android:layout_marginTop="0dp"
-            android:scrollbars="none" />
-
-        <TextView
-            android:id="@+id/main_TXT_likedSongs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/main_LST_topSongs"
-            android:layout_marginTop="15dp"
-            android:text="@string/liked_songs"
-            android:textSize="45sp" />
-
-        <ListView
-            android:id="@+id/main_LST_likedSongs"
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:layout_below="@+id/main_TXT_likedSongs"
-            android:scrollbars="none" />
-    </RelativeLayout>
-</ScrollView>
+    <ListView
+        android:id="@+id/main_LST_likedSongs"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_below="@+id/main_TXT_likedSongs"
+        android:scrollbars="none" />
+</RelativeLayout>

@@ -1,8 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="songs_array" >
-        <item>Hello</item>
-        <item>Hello</item>
-        <item>Hello</item>
-    </string-array>
-</resources>
+<resources />
