@@ -1,7 +1,6 @@
-package com.example.musicapp.models;
+package com.example.musicapp.boundaries;
 
 import com.example.musicapp.Utils;
-
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
@@ -14,9 +13,10 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Artist {
 
-    private String id = "";
+    @DocumentId
+    private String id;
     @Exclude
-    private transient List<Song> songs = new ArrayList<>();
+    private transient List<Song> songEntities = new ArrayList<>();
     private String name;
     private String imageURL;
 
@@ -41,11 +41,11 @@ public class Artist {
 
     @Exclude
     public List<Song> getSongs() {
-        return songs;
+        return songEntities;
     }
 
-    public Artist setSongs(List<Song> songs) {
-        this.songs = songs;
+    public Artist setSongEntities(List<Song> songEntities) {
+        this.songEntities = songEntities;
         return this;
     }
 
@@ -59,30 +59,30 @@ public class Artist {
     }
 
     public Artist addSong(Song song) {
-        this.songs.add(song);
+        this.songEntities.add(song);
         song.setArtist(this);
         return this;
     }
 
     public int getRank() {
 
-        if (songs.size() == 0) return 0;
+        if (songEntities.size() == 0) return 0;
         int sum = 0;
         for (Song s :
-                this.songs) {
+                this.songEntities) {
             sum += s.getRank();
         }
-        return sum / songs.size();
+        return sum / songEntities.size() * 10;
     }
 
     public String getId() {
         return this.id;
     }
 
-    public Artist setId(String id) {
-        this.id = id;
-        return this;
-    }
+//    public Artist setId(String id) {
+//        this.id = id;
+//        return this;
+//    }
 
     @Exclude
     public Map<String, Object> toMap() {

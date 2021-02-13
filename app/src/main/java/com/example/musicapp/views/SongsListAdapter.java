@@ -11,9 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.models.Artist;
-import com.example.musicapp.models.Song;
-import com.example.musicapp.models.User;
+import com.example.musicapp.boundaries.Artist;
+import com.example.musicapp.boundaries.Song;
 import com.example.musicapp.screens.ShowSong;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,33 +22,33 @@ import java.util.List;
 
 
 public class SongsListAdapter extends BaseAdapter {
-    private final Context context;
     final LayoutInflater inflater;
-    final List<Song> songs;
+    final List<Song> songEntities;
     final Intent intent;
     final Gson gson = new Gson();
+    private final Context context;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
     Artist a;
 
-    public SongsListAdapter(Context context, List<Song> songs, User user) {
+    public SongsListAdapter(Context context, List<Song> songEntities) {
         this.context = context;
-        this.songs = songs;
+        this.songEntities = songEntities;
 
 
         intent = new Intent(context, ShowSong.class);
-        this.intent.putExtra("user", gson.toJson(user));
+//        this.intent.putExtra("user", gson.toJson(user));
         this.inflater = (LayoutInflater.from(context));
     }
 
     @Override
     public int getCount() {
-        return songs.size();
+        return songEntities.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return this.songs.get(position);
+        return this.songEntities.get(position);
     }
 
     @Override
@@ -64,11 +63,11 @@ public class SongsListAdapter extends BaseAdapter {
         ImageView avatar = (ImageView) view.findViewById(R.id.songList_IMG_artist);
         TextView songName = (TextView) view.findViewById(R.id.songList_TXT_songName);
         TextView artistName = (TextView) view.findViewById(R.id.songList_TXT_artistName);
-        songName.setText(this.songs.get(i).getName());
-        artistName.setText(songs.get(i).getArtist().getName());
-        Glide.with(this.context).load(songs.get(i).getArtist().getImageURL()).circleCrop().into(avatar);
+        songName.setText(this.songEntities.get(i).getName());
+        artistName.setText(songEntities.get(i).getArtist().getName());
+        Glide.with(this.context).load(songEntities.get(i).getArtist().getImageURL()).circleCrop().into(avatar);
         view.setOnClickListener(v -> {
-            intent.putExtra("song", songs.get(i).getId());
+            intent.putExtra("song", songEntities.get(i).getId());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //intent.putExtra("artist", gson.toJson(songs.get(i).getArtist()));
 

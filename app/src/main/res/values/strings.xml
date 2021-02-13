@@ -7,7 +7,7 @@ Pellentesque posuere, quam sit amet gravida tincidunt, ipsum ex consectetur puru
 Vestibulum quis est vel mi rhoncus pharetra. Fusce id dolor mattis, laoreet sem eu, rhoncus enim. Maecenas viverra ornare arcu, eget consequat urna faucibus et. Fusce vitae volutpat augue. Pellentesque porta risus vel libero convallis vehicula. Integer ut urna venenatis, lacinia velit sed, dignissim sem. Nulla dui orci, elementum eu vulputate et, dictum lacinia turpis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec luctus lectus quis nibh fringilla, nec pharetra elit posuere. Donec ut orci non quam tristique egestas. Sed scelerisque ex nec arcu sollicitudin efficitur. Nam congue dignissim erat, a imperdiet ipsum maximus sit amet. Quisque ac iaculis odio.
 
 Sed quis tortor nec tortor dapibus elementum. Sed ultricies nulla at mi efficitur, eget ultricies mi accumsan. Curabitur ullamcorper, tellus in posuere mattis, tortor libero porta arcu, nec dictum dui dui non turpis. Suspendisse vel varius lacus. Sed sit amet finibus mauris, vel sodales massa. Morbi volutpat cursus mauris, eu iaculis orci fringilla eu. Vestibulum vitae lacus ut elit molestie eleifend. Nulla vitae ullamcorper neque. Maecenas sodales euismod bibendum. Ut molestie lacinia ultricies. Proin efficitur aliquet arcu eget varius. Nunc sit amet lorem sit amet urna ornare tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis tellus, pretium non ligula in, vehicula tempor tellus.</string>
-    <string name="top_songs">Top Songs</string>
+    <string name="top_songs">My Playlists</string>
     <string name="liked_songs">Liked Songs</string>
     <string name="title_activity_main" translatable="false">MainActivity</string>
     <string name="sign_in_cancelled">Cancel</string>
@@ -17,6 +17,10 @@ Sed quis tortor nec tortor dapibus elementum. Sed ultricies nulla at mi efficitu
     <string name="good_afternoon">"Good Afternoon"</string>
     <string name="hello">Hello</string>
     <string name="user_s_profile_photo">User\'s profile photo</string>
+    <string name="songname">SongName</string>
+    <string name="artist">Artist</string>
+    <string name="jj">Hello</string>
+    <string name="playlistName">Playlist Name</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

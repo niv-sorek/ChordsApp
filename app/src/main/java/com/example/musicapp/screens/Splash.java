@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +24,9 @@ public class Splash extends Activity {
     @Override
     protected void onCreate(Bundle icicle) {
 
-        Utils.setFullScreen(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
         findViews();

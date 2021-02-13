@@ -1,4 +1,4 @@
-package com.example.musicapp.models;
+package com.example.musicapp.boundaries;
 
 import com.google.firebase.firestore.Exclude;
 
@@ -12,13 +12,23 @@ public class User {
     private String name;
     private String phone;
     @Exclude
-    private List<Song> likedSongs = new ArrayList<>();
+    private List<Song> likedSongEntities = new ArrayList<>();
     @Exclude
-
+    private List<Playlist> playlists = new ArrayList<>();
     private ArrayList<Instrument> instruments;
     private String uid;
 
     public User() {
+        this.playlists.clear();
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public User setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
+        return this;
     }
 
     public ArrayList<User> getFriends() {
@@ -49,11 +59,11 @@ public class User {
     }
 
     public List<Song> getLikedSongs() {
-        return  likedSongs;
+        return likedSongEntities;
     }
 
-    public User setLikedSongs(List<Song> likedSongs) {
-        this.likedSongs = likedSongs;
+    public User setLikedSongs(List<Song> likedSongEntities) {
+        this.likedSongEntities = likedSongEntities;
         return this;
     }
 

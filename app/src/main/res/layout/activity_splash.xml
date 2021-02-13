@@ -23,14 +23,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:alpha="0.1"
-            android:fontFamily="@font/ubuntu"
             android:gravity="center"
-
             android:scaleX="0.2"
+
             android:scaleY="0.2"
             android:text="A-Chord"
             android:textColor="@color/black"
-            android:textSize="78sp"
-            android:textStyle="bold" />
+            android:textSize="78sp" />
     </LinearLayout>
 </RelativeLayout>

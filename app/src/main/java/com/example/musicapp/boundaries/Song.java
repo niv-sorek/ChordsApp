@@ -1,19 +1,18 @@
-package com.example.musicapp.models;
+package com.example.musicapp.boundaries;
 
-import com.example.musicapp.Utils;
+import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @IgnoreExtraProperties
 public class Song {
-    private final List<User> likes = new ArrayList<>();
+    private List<String> likes = new ArrayList<>();
     private String chords;
+    @DocumentId
     private String id;
     private String name;
     private Artist artist;
@@ -23,21 +22,22 @@ public class Song {
     public Song() {
     }
 
-    public Song(String name) {
-        this.name = name;
-    }
-
     public Song(String name, boolean rtl) {
         this.name = name;
         this.rtl = rtl;
     }
 
-    public List<User> getRanks() {
+    public List<String> getLikes() {
         return likes;
     }
 
+    public Song setLikes(List<String> likes) {
+        this.likes = likes;
+        return this;
+    }
+
     public void like(User user) {
-        likes.add(user);
+        likes.add(user.getUid());
     }
 
     public String getChords() {
@@ -53,8 +53,9 @@ public class Song {
         return name;
     }
 
-    public void setName(String name) {
+    public Song setName(String name) {
         this.name = name;
+        return this;
     }
 
     public int getRank() {
@@ -62,18 +63,29 @@ public class Song {
     }
 
     public boolean isUserLiked(User user) {
-        for (User u : likes) {
-            if (u.getUid().equals(user.getUid())) return true;
+        for (String u : likes) {
+            if (u.equals(user.getUid())) return true;
+        }
+        return false;
+    }
+
+    public boolean isUserLiked(String userId) {
+        for (String u : likes) {
+            if (u.equals(userId)) return true;
         }
         return false;
     }
 
     public boolean toggleLike(User user) {
-        if (this.isUserLiked(user)) {
-            this.likes.remove(user);
+        return this.toggleLike(user.getUid());
+    }
+
+    public boolean toggleLike(String userId) {
+        if (this.isUserLiked(userId)) {
+            this.likes.remove(userId);
             return false;
         }
-        this.like(user);
+        this.likes.add(userId);
         return true;
     }
 
@@ -86,16 +98,6 @@ public class Song {
         return this;
     }
 
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        result.put("name", name);
-        result.put("artistId", this.artist.getId());
-        result.put("chords", this.chords);
-
-        return result;
-    }
 
     public String getArtistId() {
         return this.artistId;
@@ -119,9 +121,6 @@ public class Song {
     }
 
     public String getId() {
-        if (id == null)
-            this.id = Utils.makeId(this.artist.getName() + " " + this.name);
         return this.id;
     }
-
 }

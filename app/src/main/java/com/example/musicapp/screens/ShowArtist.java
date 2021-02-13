@@ -1,7 +1,6 @@
 package com.example.musicapp.screens;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,14 +15,11 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.Utils;
 import com.example.musicapp.Viewable;
-import com.example.musicapp.models.Artist;
-import com.example.musicapp.models.Song;
+import com.example.musicapp.boundaries.Artist;
+import com.example.musicapp.boundaries.Song;
 import com.example.musicapp.views.SongsListAdapter;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 
-import java.util.List;
 
 public class ShowArtist extends AppCompatActivity implements Viewable {
 
@@ -60,32 +56,21 @@ public class ShowArtist extends AppCompatActivity implements Viewable {
     public void initViews() {
         this.artist_LAY_details.setVisibility(View.INVISIBLE);
 
-        String json = getIntent().getStringExtra("artist");
-        Gson gson = new Gson();
-        Log.d("pttt", json);
-        this.artist = gson.fromJson(json, Artist.class);
-        this.artist_TXT_artistName.setText(artist.getName());
-        Glide.with(this).load(this.artist.getImageURL()).circleCrop().into(this.artist_IMG_avatar);
-        this.artist_RATE_rating.setProgress(this.artist.getRank());
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        String artistId = getIntent().getStringExtra("artistId");
 
-        database.document("artists/" + artist.getId()).get().addOnSuccessListener(v -> ((List<DocumentReference>) v.get("songs")).forEach(documentReference -> {
-            documentReference.get().addOnSuccessListener(x -> {
-                this.artist.getSongs().add(x.toObject(Song.class).setArtist(this.artist));
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.collection("artists").document(artistId).get().addOnSuccessListener(artistRef ->
+        {
+            this.artist = artistRef.toObject(Artist.class);
+            this.artist_TXT_artistName.setText(artist.getName());
+            Glide.with(this).load(this.artist.getImageURL()).circleCrop().into(this.artist_IMG_avatar);
+            database.collection("songs").whereEqualTo("artistId", artist.getId()).get().addOnSuccessListener(songsRef -> {
+                songsRef.forEach(song -> this.artist.getSongs().add(song.toObject(Song.class).setArtist(this.artist)));
+                this.artist_RATE_rating.setProgress(this.artist.getRank());
                 this.artist_SPN_spinner.setVisibility(View.INVISIBLE);
                 artist_LAY_details.setVisibility(View.VISIBLE);
-                this.artist_LST_topSongs.setAdapter(new SongsListAdapter(this.getApplicationContext(), this.artist.getSongs(), null));
+                this.artist_LST_topSongs.setAdapter(new SongsListAdapter(this, this.artist.getSongs()));
             });
-        }));
-
-    }
-
-    public static class SongListItem extends AppCompatActivity {
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_song_list_item);
-        }
+        });
     }
 }

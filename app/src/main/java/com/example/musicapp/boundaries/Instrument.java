@@ -1,4 +1,4 @@
-package com.example.musicapp.models;
+package com.example.musicapp.boundaries;
 
 public class Instrument {
     private String name;
