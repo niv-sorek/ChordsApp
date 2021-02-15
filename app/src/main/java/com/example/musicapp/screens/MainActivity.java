@@ -2,6 +2,9 @@ package com.example.musicapp.screens;
 
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     private TextView main_TXT_greeting;
     private User connectedUser;
     private List<Artist> artistsList = new ArrayList<>();
+    private LinearLayout main_LAY_greeting;
 
 
     @Override
@@ -48,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        initViews();
         getData();
+        initViews();
 
     }
 
@@ -58,32 +62,51 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         this.main_LST_topSongs = findViewById(R.id.main_LST_topSongs);
         this.main_LST_likedSongs = findViewById(R.id.main_LST_likedSongs);
         this.main_TXT_greeting = findViewById(R.id.main_TXT_greeting);
+        this.main_LAY_greeting = findViewById(R.id.main_LAY_greeting);
     }
 
     @Override
     public void initViews() {
         main_TXT_greeting.setText("");
-        createDummyData();
+        // createDummyData();
     }
 
     private void getData() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         this.connectedUser = new User().setUid(firebaseUser.getUid());
-
         database.collection("artists").get().addOnSuccessListener(artistsDocuments -> {
             this.artistsList = artistsDocuments.getDocuments().stream().map(x -> x.toObject(Artist.class)).collect(Collectors.toList());
-
             setUserUI(this.connectedUser);
         });
     }
 
     private void setUserUI(User connectedUser) {
         database.collection("users").document(connectedUser.getUid()).get().addOnSuccessListener(userDocument -> {
+            this.connectedUser.setInstruments((ArrayList<String>) userDocument.get("instruments"));
             connectedUser.setName(userDocument.getString("name"));
             setLikedSongsList(userDocument);
             setPlaylists(userDocument);
             this.main_TXT_greeting.setText(getGreetByDayTime() + ", " + this.connectedUser.getName());
+            showInstrumentsIcons();
         });
+    }
+
+    private void showInstrumentsIcons() {
+        for (String s : this.connectedUser.getInstruments()) {
+            ImageView imageView = new ImageView(this);
+            Log.d(TAG, "setUserUI: " + s);
+            if (s.equals("Guitar"))
+                imageView.setImageResource(R.drawable.ic__acoustic_guitar);
+            if (s.equals("Sax"))
+                imageView.setImageDrawable(getDrawable(R.drawable.ic__sax));
+            if (s.equals("Piano"))
+                imageView.setImageResource(R.drawable.ic__piano);
+            main_LAY_greeting.addView(imageView, 70, 70);
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+            lp.setMarginEnd(25);
+            imageView.setLayoutParams(lp);
+
+        }
     }
 
     private void setLikedSongsList(DocumentSnapshot userDocument) {
@@ -95,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements Viewable {
                 this.connectedUser.getLikedSongs().add(likedSong);
             });
             initLikedSongsList(this.connectedUser.getLikedSongs());
-
         });
     }
 
@@ -125,24 +147,6 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         return likedSong;
     }
 
-
-//    private void setUserSongsFromReferencesList(List<DocumentReference> refs, List<Song> songsList, Callable Next) {
-//        refs.forEach(ref -> ref.get().addOnSuccessListener(command -> {
-//            Song song = command.toObject(Song.class);
-//            DocumentReference artistDocument = command.getDocumentReference("artist");
-//            database.document(artistDocument.getPath()).get().addOnSuccessListener(documentSnapshot -> {
-//                song.setArtist(documentSnapshot.toObject(Artist.class));
-//                songsList.add(song);
-//                try {
-//                    Next.call();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        }));
-//    }
-
-
     private String getGreetByDayTime() {
 
         Calendar rightNow = Calendar.getInstance();
@@ -163,20 +167,12 @@ public class MainActivity extends AppCompatActivity implements Viewable {
 
     private void createDummyData() {
         createDummySongsAndArtists();
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void createDummySongsAndArtists() {
-//        final HashMap<String, Artist> artists = getArtistHashMap();
-//        for (Map.Entry<String, Artist> artistEntry : artists.entrySet()) {
-//            saveArtistInDB(artistEntry);
-//        }
-//        this.connectedUser.setLikedSongs(artists.get("queen").getSongs());
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        this.connectedUser = new User().setUid(user.getUid()).setName("Niv Sorek");
+
+        //        this.connectedUser = new User().setUid(user.getUid()).setName("Niv Sorek");
         saveLikedSongsInDB(this.connectedUser);
-
-
     }
 
     private HashMap<String, Artist> getArtistHashMap() {

@@ -60,19 +60,17 @@ public class SongsListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         view = inflater.inflate(R.layout.activity_song_list_item, null);
-        ImageView avatar = (ImageView) view.findViewById(R.id.songList_IMG_artist);
-        TextView songName = (TextView) view.findViewById(R.id.songList_TXT_songName);
-        TextView artistName = (TextView) view.findViewById(R.id.songList_TXT_artistName);
+        ImageView avatar = view.findViewById(R.id.songList_IMG_artist);
+        TextView songName = view.findViewById(R.id.songList_TXT_songName);
+        TextView artistName = view.findViewById(R.id.songList_TXT_artistName);
         songName.setText(this.songEntities.get(i).getName());
+
         artistName.setText(songEntities.get(i).getArtist().getName());
         Glide.with(this.context).load(songEntities.get(i).getArtist().getImageURL()).circleCrop().into(avatar);
         view.setOnClickListener(v -> {
             intent.putExtra("song", songEntities.get(i).getId());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //intent.putExtra("artist", gson.toJson(songs.get(i).getArtist()));
-
             context.startActivity(intent);
-
         });
 
 

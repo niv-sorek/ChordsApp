@@ -15,7 +15,7 @@ public class User {
     private List<Song> likedSongEntities = new ArrayList<>();
     @Exclude
     private List<Playlist> playlists = new ArrayList<>();
-    private ArrayList<Instrument> instruments;
+    private ArrayList<String> instruments;
     private String uid;
 
     public User() {
@@ -67,11 +67,11 @@ public class User {
         return this;
     }
 
-    public ArrayList<Instrument> getInstruments() {
+    public ArrayList<String> getInstruments() {
         return instruments;
     }
 
-    public User setInstruments(ArrayList<Instrument> instruments) {
+    public User setInstruments(ArrayList<String> instruments) {
         this.instruments = instruments;
         return this;
     }

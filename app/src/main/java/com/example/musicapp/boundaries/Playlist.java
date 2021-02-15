@@ -10,10 +10,20 @@ public class Playlist {
     @DocumentId
     private String id;
     private String name;
+    private String creatorId;
     @Exclude
     private List<Song> songs = new ArrayList<>();
 
     public Playlist() {
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public Playlist setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+        return this;
     }
 
     public String getId() {

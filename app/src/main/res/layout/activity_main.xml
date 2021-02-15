@@ -17,19 +17,40 @@
         android:contentDescription="@string/user_s_profile_photo"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/main_TXT_greeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/main_IMG_avatar"
-        android:text="Hello, Name"
-        android:textSize="20sp" />
+    <LinearLayout
+        android:id="@+id/main_LAY_greeting"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/main_IMG_avatar"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/main_TXT_greeting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="Hello, Name"
+            android:textSize="20sp" />
+
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            tools:srcCompat="@tools:sample/avatars" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/song_LAY_playlists"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/main_TXT_greeting">
+        android:layout_below="@id/main_LAY_greeting">
 
         <TextView
             android:id="@+id/main_TXT_topSongs"
