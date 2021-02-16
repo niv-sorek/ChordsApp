@@ -1,8 +1,12 @@
 package com.example.musicapp.screens;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -14,6 +18,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.Utils;
 import com.example.musicapp.Viewable;
 import com.example.musicapp.boundaries.Artist;
+import com.example.musicapp.boundaries.Instrument;
 import com.example.musicapp.boundaries.Playlist;
 import com.example.musicapp.boundaries.Song;
 import com.example.musicapp.boundaries.User;
@@ -41,10 +46,11 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     private ListView main_LST_topSongs;
     private ListView main_LST_likedSongs;
     private TextView main_TXT_greeting;
+    private ImageView main_IMG_addPlaylist;
     private User connectedUser;
     private List<Artist> artistsList = new ArrayList<>();
     private LinearLayout main_LAY_greeting;
-
+    private String newPlaylistName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +69,45 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         this.main_LST_likedSongs = findViewById(R.id.main_LST_likedSongs);
         this.main_TXT_greeting = findViewById(R.id.main_TXT_greeting);
         this.main_LAY_greeting = findViewById(R.id.main_LAY_greeting);
+        this.main_IMG_addPlaylist = findViewById(R.id.main_IMG_addPlaylist);
     }
 
     @Override
     public void initViews() {
         main_TXT_greeting.setText("");
+        this.main_IMG_addPlaylist.setOnClickListener(v ->
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Title");
+
+            // Set up the input
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    newPlaylistName = input.getText().toString();
+                    Playlist p = new Playlist().setName(newPlaylistName)
+                            .setCreatorId(connectedUser.getUid());
+                    String id = database.collection("playlists").document().getId();
+                    database.collection("playlists").document(id).set(p);
+                    database.collection("users").document(connectedUser.getUid())
+                            .update("playlists", FieldValue.arrayUnion(id));
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        });
         // createDummyData();
     }
 
@@ -75,32 +115,38 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         this.connectedUser = new User().setUid(firebaseUser.getUid());
         database.collection("artists").get().addOnSuccessListener(artistsDocuments -> {
-            this.artistsList = artistsDocuments.getDocuments().stream().map(x -> x.toObject(Artist.class)).collect(Collectors.toList());
-            setUserUI(this.connectedUser);
+            this.artistsList =
+                    artistsDocuments.getDocuments().stream().map(x -> x.toObject(Artist.class))
+                            .collect(Collectors.toList());
+            setUserUI();
         });
     }
 
-    private void setUserUI(User connectedUser) {
-        database.collection("users").document(connectedUser.getUid()).get().addOnSuccessListener(userDocument -> {
-            this.connectedUser.setInstruments((ArrayList<String>) userDocument.get("instruments"));
-            connectedUser.setName(userDocument.getString("name"));
-            setLikedSongsList(userDocument);
-            setPlaylists(userDocument);
-            this.main_TXT_greeting.setText(getGreetByDayTime() + ", " + this.connectedUser.getName());
-            showInstrumentsIcons();
-        });
+    private void setUserUI() {
+        database.collection("users").document(this.connectedUser.getUid()).get()
+                .addOnSuccessListener(userDocument -> {
+                    ArrayList<Number> instruments =
+                            ((ArrayList<Number>) userDocument.get("instruments"));
+                    if (instruments != null)
+                        this.connectedUser.setInstruments(instruments);
+                    this.connectedUser.setName(userDocument.getString("name"));
+                    setLikedSongsList(userDocument);
+                    setPlaylists(userDocument);
+                    this.main_TXT_greeting
+                            .setText(getGreetByDayTime() + ", " + this.connectedUser.getName());
+                    showInstrumentsIcons();
+                });
     }
 
     private void showInstrumentsIcons() {
-        for (String s : this.connectedUser.getInstruments()) {
+
+        for (int i = 0; i < this.connectedUser.getInstruments().size(); i++) {
             ImageView imageView = new ImageView(this);
-            Log.d(TAG, "setUserUI: " + s);
-            if (s.equals("Guitar"))
-                imageView.setImageResource(R.drawable.ic__acoustic_guitar);
-            if (s.equals("Sax"))
-                imageView.setImageDrawable(getDrawable(R.drawable.ic__sax));
-            if (s.equals("Piano"))
-                imageView.setImageResource(R.drawable.ic__piano);
+            Log.d(TAG, "setUserUI: " + i);
+            int instrumentIndex = this.connectedUser.getInstruments().get(i).intValue();
+            imageView.setImageResource(Instrument.InstrumentsDrawables[instrumentIndex]);
+            imageView
+                    .setContentDescription(getString(Instrument.InstrumentsNames[instrumentIndex]));
             main_LAY_greeting.addView(imageView, 70, 70);
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) imageView.getLayoutParams();
             lp.setMarginEnd(25);
@@ -111,46 +157,76 @@ public class MainActivity extends AppCompatActivity implements Viewable {
 
     private void setLikedSongsList(DocumentSnapshot userDocument) {
         List<String> likedSongsIDs = (List<String>) userDocument.get("likedSongs");
-        database.collection("songs").whereIn(FieldPath.documentId(), likedSongsIDs).get().addOnSuccessListener(likedSongs -> {
-            likedSongs.forEach(likedSongRef ->
-            {
-                Song likedSong = getSong(likedSongRef);
-                this.connectedUser.getLikedSongs().add(likedSong);
-            });
-            initLikedSongsList(this.connectedUser.getLikedSongs());
-        });
+        try {
+            database.collection("songs").whereIn(FieldPath.documentId(), likedSongsIDs).get()
+                    .addOnSuccessListener(likedSongs -> {
+                        likedSongs.forEach(likedSongRef ->
+                        {
+                            Song likedSong = getSong(likedSongRef);
+                            this.connectedUser.getLikedSongs().add(likedSong);
+                        });
+                        initLikedSongsList(this.connectedUser.getLikedSongs());
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setPlaylists(DocumentSnapshot userDocument) {
         List<String> playlistsID = (List<String>) userDocument.get("playlists");
-        playlistsID.forEach(playlistID -> {
-            database.collection("playlists").document(playlistID).get().addOnSuccessListener(playlistRef -> {
-                Map<String, Object> playlistMap = playlistRef.getData();
-                Playlist playlist = new Playlist().setName(playlistMap.get("name").toString());
-                playlist.setId(playlistRef.getId());
-                List<String> playlistSongs = (List<String>) playlistMap.get("songs");
-                database.collection("songs").whereIn(FieldPath.documentId(), playlistSongs).get().addOnSuccessListener(playlistSongsRefs -> {
-                    playlistSongsRefs.forEach(playlistSongRef -> {
-                        playlist.getSongs().add(getSong(playlistSongRef));
-                    });
-                    this.connectedUser.getPlaylists().add(playlist);
+        if (playlistsID != null && playlistsID.size() > 0) {
+            playlistsID.forEach(playlistID -> {
+                try {
+                    database.collection("playlists").document(playlistID).get()
+                            .addOnSuccessListener(playlistRef -> {
+                                Map<String, Object> playlistMap = playlistRef.getData();
+                                Playlist playlist =
+                                        new Playlist().setName(playlistMap.get("name").toString());
+                                playlist.setId(playlistRef.getId());
+                                List<String> playlistSongs =
+                                        (List<String>) playlistMap.get("songs");
 
-                    this.main_LST_topSongs.setAdapter(new PlaylistListAdapter(this, this.connectedUser.getPlaylists()));
-                });
+                                this.connectedUser.getPlaylists().add(playlist);
+                                if (playlistSongs.size() > 0) {
+                                    database.collection("songs")
+                                            .whereIn(FieldPath.documentId(), playlistSongs).get()
+                                            .addOnSuccessListener(playlistSongsRefs -> {
+
+                                                playlistSongsRefs.forEach(playlistSongRef -> {
+                                                    playlist.getSongs()
+                                                            .add(getSong(playlistSongRef));
+                                                });
+                                                this.main_LST_topSongs
+                                                        .setAdapter(new PlaylistListAdapter(this, this.connectedUser
+                                                                .getPlaylists()));
+
+                                            });
+                                }
+                                this.main_LST_topSongs
+                                        .setAdapter(new PlaylistListAdapter(this, this.connectedUser
+                                                .getPlaylists()));
+
+                            });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
-        });
+        }
     }
 
     private Song getSong(QueryDocumentSnapshot likedSongRef) {
         Song likedSong = likedSongRef.toObject(Song.class);
-        likedSong.setArtist(artistsList.stream().filter(artist -> artist.getId().equals(likedSong.getArtistId())).findFirst().get());
+        likedSong.setArtist(artistsList.stream()
+                .filter(artist -> artist.getId().equals(likedSong.getArtistId())).findFirst()
+                .get());
         return likedSong;
     }
 
     private String getGreetByDayTime() {
 
         Calendar rightNow = Calendar.getInstance();
-        int hour = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
+        int hour =
+                rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
         if (hour <= 5 || hour >= 20)
             return getString(R.string.good_night);
         else if (hour >= 16)
@@ -180,8 +256,10 @@ public class MainActivity extends AppCompatActivity implements Viewable {
 
         Artist queen = new Artist("Queen", "https://cdn.britannica.com/" +
                 "38/200938-050-E22981D1/Freddie-Mercury-Live-Aid-Queen-Wembley-Stadium-July-13-1985.jpg");
-        Artist ofer = new Artist("עופר לוי", "https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_792,w_900/477232");
-        Artist beatles = new Artist("The Beatles", "https://upload.wikimedia.org/wikipedia/commons/d/df/The_Fabs.JPG");
+        Artist ofer =
+                new Artist("עופר לוי", "https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_792,w_900/477232");
+        Artist beatles =
+                new Artist("The Beatles", "https://upload.wikimedia.org/wikipedia/commons/d/df/The_Fabs.JPG");
 
         addSongToArtist(ofer, new Song("בצמאוני", true));
         addSongToArtist(ofer, new Song("מעיין הנעורים", true));
@@ -202,8 +280,10 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     }
 
     private void saveArtistInDB(Map.Entry<String, Artist> artistEntry) {
-        database.collection("artists").document(artistEntry.getKey()).set(artistEntry.getValue().toMap()).addOnSuccessListener(aVoid -> {
-            DocumentReference artistDocument = database.collection("artists").document(artistEntry.getKey());
+        database.collection("artists").document(artistEntry.getKey())
+                .set(artistEntry.getValue().toMap()).addOnSuccessListener(aVoid -> {
+            DocumentReference artistDocument =
+                    database.collection("artists").document(artistEntry.getKey());
             for (Song songEntry : artistEntry.getValue().getSongs()) {
                 saveSongInDB(artistDocument, songEntry);
             }
@@ -213,17 +293,22 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     private void saveSongInDB(DocumentReference artistDocument, Song songEntry) {
         DocumentReference songDocument = database.collection("songs").document(songEntry.getId());
 
-        songDocument.set(songEntry).addOnSuccessListener(aVoid1 -> songDocument.update("artist", artistDocument).addOnSuccessListener(aVoid2 -> artistDocument.update("songs", FieldValue.arrayUnion(songDocument))));
+        songDocument.set(songEntry)
+                .addOnSuccessListener(aVoid1 -> songDocument.update("artist", artistDocument)
+                        .addOnSuccessListener(aVoid2 -> artistDocument
+                                .update("songs", FieldValue.arrayUnion(songDocument))));
     }
 
     private void saveLikedSongsInDB(User user) {
 
 
-        DocumentReference userDocument = database.collection("users").document(connectedUser.getUid());
+        DocumentReference userDocument =
+                database.collection("users").document(connectedUser.getUid());
 
         this.connectedUser.getLikedSongs().forEach((song) -> {
             DocumentReference songDocument = database.collection("songs").document(song.getId());
-            userDocument.set(connectedUser.toMap()).addOnSuccessListener(command -> userDocument.update("likedSongs", FieldValue.arrayUnion(songDocument)));
+            userDocument.set(connectedUser.toMap()).addOnSuccessListener(command -> userDocument
+                    .update("likedSongs", FieldValue.arrayUnion(songDocument)));
         });
     }
 

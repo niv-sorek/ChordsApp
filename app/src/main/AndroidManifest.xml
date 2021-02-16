@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicApp">
-        <activity android:name=".screens.ShowPlaylist"></activity>
+        <activity android:name=".screens.SignupScreen"></activity>
+        <activity android:name=".screens.ShowPlaylist" />
         <activity android:name=".playlistItem" />
         <activity android:name=".screens.LoginActivity" />
         <activity android:name=".screens.MainActivity" />
@@ -44,7 +44,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".screens.SongListItem" />
-
         <activity android:name=".screens.ShowSong" />
         <activity android:name=".screens.ShowArtist" />
     </application>

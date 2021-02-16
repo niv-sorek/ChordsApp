@@ -12,4 +12,8 @@
     <string name="user_s_profile_photo">תמונת פרופילל</string>
     <string name="songname">שם השיר</string>
     <string name="artist">אמן</string>
+    <string name="acoustic_guitar">גיטרה אקוסטית</string>
+    <string name="keyboard">קלידים</string>
+    <string name="bass">בס</string>
+    <string name="saxophone">סקסופון</string>
 </resources>

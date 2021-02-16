@@ -2,7 +2,6 @@ package com.example.musicapp.screens;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.Utils;
 
 public class Splash extends Activity {
     private static final int SPLASH_TIME_OUT = 3000;
@@ -25,7 +23,8 @@ public class Splash extends Activity {
     protected void onCreate(Bundle icicle) {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow()
+                .setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
@@ -42,7 +41,8 @@ public class Splash extends Activity {
 
     private void initViews() {
         Glide.with(this).load(R.drawable.splash_guitar).centerCrop().into(this.splash_IMG_guitar);
-        splash_TXT_title.animate().setDuration(2000).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).alpha(1f);
+        splash_TXT_title.animate().setDuration(2000).scaleX(1).scaleY(1)
+                .setInterpolator(new AccelerateInterpolator()).alpha(1f);
     }
 
     private void findViews() {

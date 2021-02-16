@@ -13,6 +13,7 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 
@@ -26,13 +27,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
         if (user != null) {
-            openApp();
+            database.collection("users").document(user.getUid()).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.getString("name").length() != 0) {
+                            openApp();
+                        } else
+                            startLoginMethod();
+                    });
         } else {
             startLoginMethod();
         }
@@ -76,7 +81,8 @@ public class LoginActivity extends AppCompatActivity {
 
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                openApp();
+//                openApp();
+                openSignupActivity();
             } else {
                 // Sign in failed
                 if (response == null) {
@@ -94,6 +100,12 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("pttt", "Sign-in error: ", response.getError());
             }
         }
+    }
+
+    private void openSignupActivity() {
+        Intent myIntent = new Intent(this, SignupScreen.class);
+        startActivity(myIntent);
+        finish();
     }
 
     private void showSnackbar(int id) {

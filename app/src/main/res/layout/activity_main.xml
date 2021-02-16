@@ -32,17 +32,6 @@
             android:gravity="start"
             android:text="Hello, Name"
             android:textSize="20sp" />
-
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 
 
@@ -52,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/main_LAY_greeting">
 
+
         <TextView
             android:id="@+id/main_TXT_topSongs"
             android:layout_width="wrap_content"
@@ -59,11 +49,22 @@
             android:layout_weight="1"
             android:text="@string/top_songs"
             android:textFontWeight="700"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
+
+        <ImageView
+            android:id="@+id/main_IMG_addPlaylist"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="-12dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_plus"
+            android:alpha="0.9"/>
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:alpha="0.6"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_playlist" />
     </LinearLayout>
@@ -93,7 +94,7 @@
             android:layout_weight="1"
             android:text="@string/liked_songs"
             android:textFontWeight="700"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <ImageView
             android:id="@+id/imageView"

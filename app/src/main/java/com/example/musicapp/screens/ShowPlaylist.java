@@ -18,6 +18,8 @@ import com.example.musicapp.boundaries.Artist;
 import com.example.musicapp.boundaries.Playlist;
 import com.example.musicapp.boundaries.Song;
 import com.example.musicapp.views.SongsListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
@@ -95,6 +97,20 @@ public class ShowPlaylist extends AppCompatActivity {
                     }
                 });
             } else if (searchType == SEARCH.Users) {
+                database.collection("users")
+                        .whereEqualTo("name", this.playlist_INP_search.getText().toString())
+                        .get().addOnSuccessListener(t -> {
+                    if (t.getDocuments().size() > 0) {
+                        Song song = t.getDocuments().get(0).toObject(Song.class);
+                        database.collection("playlists").document(playlist.getId()).update("songs", FieldValue.arrayUnion(song.getId()));
+                        database.collection("artists").document(song.getArtistId()).get().addOnSuccessListener(artistDoc -> {
+                            Artist artist = artistDoc.toObject(Artist.class);
+                            song.setArtist(artist);
+                            playlist.getSongs().add(song);
+                            initViews();
+                        });
+                    }
+                });
             }
 
         });
@@ -102,26 +118,52 @@ public class ShowPlaylist extends AppCompatActivity {
 
 
     private void updateUI() {
-        this.playlist_LAY_input.setVisibility(this.playlist_LAY_input.getVisibility() == View.INVISIBLE? View.VISIBLE: View.INVISIBLE);
+        this.playlist_LAY_input.setVisibility(this.playlist_LAY_input.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
         if (this.searchType == SEARCH.Songs) {
-            database.collection("songs").get().addOnSuccessListener(v -> {
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_dropdown_item_1line, v.getDocuments()
-                        .stream()
-                        .map(x -> x.getString("name"))
-                        .collect(Collectors.toList()));
-
-                this.playlist_INP_search.setAdapter(adapter);
-                this.playlist_INP_search.setOnEditorActionListener((v1, actionId, event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        this.playlist_BTN_ok.performClick();
-                        return true;
-                    }
-                    return false;
-                });
-            });
+            updateUISearchSong();
         } else if (searchType == SEARCH.Users) {
-
+            updateUISearchUser();
         }
+    }
+
+    private void updateUISearchUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        database.collection("users").get().addOnSuccessListener(v -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_dropdown_item_1line, v.getDocuments()
+                    .stream().filter(
+                            x -> !x.getId().equals(user.getUid())
+                    )
+                    .map(x -> x.getString("name"))
+                    .collect(Collectors.toList()));
+
+            this.playlist_INP_search.setAdapter(adapter);
+            this.playlist_INP_search.setOnEditorActionListener((v1, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    this.playlist_BTN_ok.performClick();
+                    return true;
+                }
+                return false;
+            });
+        });
+    }
+
+    private void updateUISearchSong() {
+        database.collection("songs").get().addOnSuccessListener(v -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_dropdown_item_1line, v.getDocuments()
+                    .stream()
+                    .map(x -> x.getString("name"))
+                    .collect(Collectors.toList()));
+
+            this.playlist_INP_search.setAdapter(adapter);
+            this.playlist_INP_search.setOnEditorActionListener((v1, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    this.playlist_BTN_ok.performClick();
+                    return true;
+                }
+                return false;
+            });
+        });
     }
 }

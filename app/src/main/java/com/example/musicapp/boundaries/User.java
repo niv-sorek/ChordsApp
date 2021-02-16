@@ -1,5 +1,6 @@
 package com.example.musicapp.boundaries;
 
+import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ public class User {
     private List<Song> likedSongEntities = new ArrayList<>();
     @Exclude
     private List<Playlist> playlists = new ArrayList<>();
-    private ArrayList<String> instruments;
+    private ArrayList<Number> instruments = new ArrayList<>();
+    @DocumentId
     private String uid;
 
     public User() {
         this.playlists.clear();
+        this.instruments = new ArrayList<>();
     }
 
     public List<Playlist> getPlaylists() {
@@ -67,11 +70,11 @@ public class User {
         return this;
     }
 
-    public ArrayList<String> getInstruments() {
+    public ArrayList<Number> getInstruments() {
         return instruments;
     }
 
-    public User setInstruments(ArrayList<String> instruments) {
+    public User setInstruments(ArrayList<Number> instruments) {
         this.instruments = instruments;
         return this;
     }
