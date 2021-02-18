@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingTop="10dp"
-    tools:context=".screens.SongListItem">
+    tools:context=".views.SongListItem">
 
     <TextView
         android:id="@+id/playlist_TXT_name"

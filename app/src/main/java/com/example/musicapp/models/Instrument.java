@@ -1,4 +1,4 @@
-package com.example.musicapp.boundaries;
+package com.example.musicapp.models;
 
 import com.example.musicapp.R;
 

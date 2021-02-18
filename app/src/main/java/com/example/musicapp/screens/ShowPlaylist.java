@@ -15,12 +15,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.musicapp.ListItem;
 import com.example.musicapp.R;
 import com.example.musicapp.Utils;
-import com.example.musicapp.boundaries.Artist;
-import com.example.musicapp.boundaries.Playlist;
-import com.example.musicapp.boundaries.Song;
+import com.example.musicapp.models.Artist;
+import com.example.musicapp.models.Playlist;
+import com.example.musicapp.models.Song;
+import com.example.musicapp.views.SongListItem;
 import com.example.musicapp.views.SongsListAdapter;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -115,7 +115,7 @@ public class ShowPlaylist extends AppCompatActivity {
             /// ---------------------------------------------------------------------------------
 
             if (searchType == SEARCH.Songs) {
-                Song item = (Song) ((ListItem) parent.getAdapter().getItem(position)).getData();
+                Song item = (Song) ((SongListItem.ListItem) parent.getAdapter().getItem(position)).getData();
 
                 database.collection("playlists").document(playlist.getId()).update("songs", FieldValue.arrayUnion(item.getId()));
                 database.collection("artists").document(item.getArtistId()).get().addOnSuccessListener(artistDoc -> {
@@ -127,7 +127,7 @@ public class ShowPlaylist extends AppCompatActivity {
                     t.show();
                 });
             } else if (searchType == SEARCH.Users) {
-                String userId = (String) ((ListItem) parent.getAdapter().getItem(position)).getData();
+                String userId = (String) ((SongListItem.ListItem) parent.getAdapter().getItem(position)).getData();
                 database.collection("users").document(userId).update("playlists", FieldValue.arrayUnion(playlist.getId())).addOnSuccessListener(v -> {
                     Toast t = Toast.makeText(this, "Playlist shared With " + parent.getAdapter().getItem(position).toString(), Toast.LENGTH_LONG);
                     t.show();
@@ -148,7 +148,7 @@ public class ShowPlaylist extends AppCompatActivity {
     private void updateUISearchUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         database.collection("users").get().addOnSuccessListener(v -> {
-            ArrayAdapter<ListItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, v.getDocuments().stream().filter(x -> !x.getId().equals(user.getUid())).map(x -> new ListItem(x.getString("name"), x.getId())).collect(Collectors.toList()));
+            ArrayAdapter<SongListItem.ListItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, v.getDocuments().stream().filter(x -> !x.getId().equals(user.getUid())).map(x -> new SongListItem.ListItem(x.getString("name"), x.getId())).collect(Collectors.toList()));
 
             editText.setAdapter(adapter);
 
@@ -159,11 +159,11 @@ public class ShowPlaylist extends AppCompatActivity {
     private void updateUISearchSong() {
         database.collection("songs").get().addOnSuccessListener(v -> {
 
-            List<ListItem> items = v.getDocuments().stream().map(x -> {
-                return new ListItem(x.getString("name") + " - " + MainActivity.artistsList.stream().filter(a -> a.getId().equals(x.getString("artistId"))).findFirst().get().getName(), x.toObject(Song.class));
+            List<SongListItem.ListItem> items = v.getDocuments().stream().map(x -> {
+                return new SongListItem.ListItem(x.getString("name") + " - " + MainActivity.artistsList.stream().filter(a -> a.getId().equals(x.getString("artistId"))).findFirst().get().getName(), x.toObject(Song.class));
             }).collect(Collectors.toList());
 
-            ArrayAdapter<ListItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, items);
+            ArrayAdapter<SongListItem.ListItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, items);
             editText.setAdapter(adapter);
 
 

@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicapp.R;
 import com.example.musicapp.Utils;
-import com.example.musicapp.boundaries.Instrument;
-import com.example.musicapp.boundaries.User;
+import com.example.musicapp.models.Instrument;
+import com.example.musicapp.models.User;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;

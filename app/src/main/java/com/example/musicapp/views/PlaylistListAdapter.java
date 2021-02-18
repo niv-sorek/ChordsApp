@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.musicapp.R;
-import com.example.musicapp.boundaries.Playlist;
+import com.example.musicapp.models.Playlist;
 import com.example.musicapp.screens.ShowPlaylist;
 import com.google.gson.Gson;
 

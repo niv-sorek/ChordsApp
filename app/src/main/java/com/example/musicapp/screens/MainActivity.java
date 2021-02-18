@@ -16,16 +16,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.musicapp.ListItem;
 import com.example.musicapp.R;
 import com.example.musicapp.Utils;
 import com.example.musicapp.Viewable;
-import com.example.musicapp.boundaries.Artist;
-import com.example.musicapp.boundaries.Instrument;
-import com.example.musicapp.boundaries.Playlist;
-import com.example.musicapp.boundaries.Song;
-import com.example.musicapp.boundaries.User;
+import com.example.musicapp.models.Artist;
+import com.example.musicapp.models.Instrument;
+import com.example.musicapp.models.Playlist;
+import com.example.musicapp.models.Song;
+import com.example.musicapp.models.User;
 import com.example.musicapp.views.PlaylistListAdapter;
+import com.example.musicapp.views.SongListItem;
 import com.example.musicapp.views.SongsListAdapter;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         this.editText = (AutoCompleteTextView) this.main_INP_search.getEditText();
 
         this.editText.setOnItemClickListener((parent, view, position, id) -> {
-            Song selectedSong = (Song) ((ListItem) parent.getAdapter().getItem(position)).getData();
+            Song selectedSong = (Song) ((SongListItem.ListItem) parent.getAdapter().getItem(position)).getData();
             Intent intent = new Intent(MainActivity.this, ShowSong.class);
             intent.putExtra("song", selectedSong.getId());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements Viewable {
 
     private void setUserUI() {
         database.collection("songs").get().addOnSuccessListener(v -> {
-            List<ListItem> collect = v.getDocuments().stream().map(x -> {
+            List<SongListItem.ListItem> collect = v.getDocuments().stream().map(x -> {
                 Song song = getSong((QueryDocumentSnapshot) x);
-                return new ListItem(song.getName() + " - " + song.getArtist().getName(), song);
+                return new SongListItem.ListItem(song.getName() + " - " + song.getArtist().getName(), song);
             }).collect(Collectors.toList());
             this.editText.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, collect));
         });

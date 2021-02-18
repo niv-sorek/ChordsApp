@@ -1,4 +1,4 @@
-package com.example.musicapp.boundaries;
+package com.example.musicapp.models;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.Exclude;

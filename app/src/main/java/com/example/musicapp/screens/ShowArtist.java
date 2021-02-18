@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.Utils;
 import com.example.musicapp.Viewable;
-import com.example.musicapp.boundaries.Artist;
-import com.example.musicapp.boundaries.Song;
+import com.example.musicapp.models.Artist;
+import com.example.musicapp.models.Song;
 import com.example.musicapp.views.SongsListAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
 
