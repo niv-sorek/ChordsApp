@@ -48,7 +48,10 @@ public class ShowSong extends AppCompatActivity implements Viewable {
     private ProgressBar song_PRG_loading;
     private ImageView song_ICN_like;
     private TextView song_TXT_likesCount;
-
+    private TextView song_TXT_minus;
+    private TextView song_TXT_plus;
+    private TextView song_TXT_tones;
+    private int tones = 0;
     private Song song;
 
     @Override
@@ -66,11 +69,95 @@ public class ShowSong extends AppCompatActivity implements Viewable {
         this.song_LAY_chords = findViewById(R.id.song_LAY_chords);
         this.song_TXT_songName = findViewById(R.id.song_TXT_songName);
         this.song_TXT_artistName = findViewById(R.id.song_TXT_artistName);
-
-        song_ICN_like = findViewById(R.id.song_ICN_like);
-        song_TXT_likesCount = findViewById(R.id.song_TXT_likesCount);
-
+        this.song_ICN_like = findViewById(R.id.song_ICN_like);
+        this.song_TXT_likesCount = findViewById(R.id.song_TXT_likesCount);
         this.song_PRG_loading = findViewById(R.id.song_PRG_loading);
+        this.song_TXT_minus = findViewById(R.id.song_TXT_minus);
+        this.song_TXT_plus = findViewById(R.id.song_TXT_plus);
+        this.song_TXT_tones = findViewById(R.id.song_TXT_tones);
+    }
+
+    @Override
+    public void initViews() {
+
+        this.song_LAY_details.setVisibility(View.INVISIBLE);
+        String songId = getIntent().getStringExtra("song");
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.document("songs/" + songId).get().addOnSuccessListener(songSnapshot -> {
+            this.song = songSnapshot.toObject(Song.class);
+            song_TXT_songName.setText(song.getName());
+            FirebaseAuth fbUser = FirebaseAuth.getInstance();
+            setLikeIcon(fbUser);
+            this.song_ICN_like.setOnClickListener(v -> {
+                song.toggleLike(fbUser.getUid());
+                database.collection("songs").document(songId).update("likes", song.getLikes());
+                setLikeIcon(fbUser);
+            });
+            song_LAY_details.setLayoutDirection(song.isRtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            if (this.song.getChords() != null && this.song.getChords().length() > 0) {
+                updateChords();
+            }
+
+            String artistId = songSnapshot.getString("artistId");
+            database.collection("artists").document(artistId).get().addOnSuccessListener(artistSnapshot -> {
+                song.setArtist(artistSnapshot.toObject(Artist.class));
+                song_TXT_artistName.setText(song.getArtist().getName());
+                this.song_TXT_artistName.setOnClickListener(v -> {
+                    Intent intent = new Intent(this, ShowArtist.class);
+                    intent.putExtra("artistId", artistId);
+                    this.startActivity(intent);
+                });
+
+                this.song_PRG_loading.setVisibility(View.INVISIBLE);
+                this.song_LAY_details.setVisibility(View.VISIBLE);
+            });
+        });
+
+        this.song_TXT_minus.setOnClickListener(v -> {
+            this.tones--;
+            updateChords();
+        });
+        this.song_TXT_plus.setOnClickListener(v -> {
+            this.tones++;
+            updateChords();
+        });
+    }
+
+    private void setLikeIcon(@NotNull FirebaseAuth fbUser) {
+        Drawable likeIcon = getDrawable(this.song.isUserLiked(fbUser.getUid()) ? R.drawable.ic_like_clicked : R.drawable.ic_like);
+        this.song_ICN_like.setImageDrawable(likeIcon);
+        this.song_TXT_likesCount.setText("" + this.song.getRank());
+
+    }
+
+
+    private void updateChords() {
+        this.song_TXT_tones.setText("" + tones);
+        this.song_LAY_chords.removeAllViewsInLayout();
+        AtomicInteger index = new AtomicInteger();
+        ChordsUtils.formatChordsString(this.song.getChords(), "_", tones).forEach(s -> {
+            TextView textView = new TextView(this);
+            textView.setTextSize(18);
+            if (index.get() % 2 == 0) textView.setTextColor(Color.BLUE);
+            textView.setText(s);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.assistant);
+            textView.setTypeface(typeface);
+            song_LAY_chords.addView(textView);
+            index.getAndIncrement();
+        });
+        this.song_LAY_chords.setOnLongClickListener(v -> {
+            updateChordsFontSize(scale);
+            scale = scale == 1f ? 2f : 1f;
+            return true;
+        });
+    }
+
+    private void updateChordsFontSize(float mScaleFactor) {
+        Log.d("pttt", "updateChordsFontSize: " + mScaleFactor);
+        for (int i = 0; i < song_LAY_chords.getChildCount(); i++) {
+            TextView child = (TextView) (song_LAY_chords.getChildAt(i));
+            child.setTextSize(24 * mScaleFactor);
+        }
     }
 
     @Override
@@ -134,79 +221,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
         return true;
     }
 
-
-    @Override
-    public void initViews() {
-
-        this.song_LAY_details.setVisibility(View.INVISIBLE);
-        String songId = getIntent().getStringExtra("song");
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        database.document("songs/" + songId).get().addOnSuccessListener(songSnapshot -> {
-            this.song = songSnapshot.toObject(Song.class);
-            song_TXT_songName.setText(song.getName());
-            FirebaseAuth fbUser = FirebaseAuth.getInstance();
-            setLikeIcon(fbUser);
-            this.song_ICN_like.setOnClickListener(v -> {
-                song.toggleLike(fbUser.getUid());
-                database.collection("songs").document(songId).update("likes", song.getLikes());
-                setLikeIcon(fbUser);
-            });
-            song_LAY_details.setLayoutDirection(song.isRtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
-            if (this.song.getChords() != null && this.song.getChords().length() > 0) {
-                updateChords();
-            }
-
-            String artistId = songSnapshot.getString("artistId");
-            database.collection("artists").document(artistId).get().addOnSuccessListener(artistSnapshot -> {
-                song.setArtist(artistSnapshot.toObject(Artist.class));
-                song_TXT_artistName.setText(song.getArtist().getName());
-                this.song_TXT_artistName.setOnClickListener(v -> {
-                    Intent intent = new Intent(this, ShowArtist.class);
-                    intent.putExtra("artistId", artistId);
-                    this.startActivity(intent);
-                });
-
-                this.song_PRG_loading.setVisibility(View.INVISIBLE);
-                this.song_LAY_details.setVisibility(View.VISIBLE);
-            });
-        });
-    }
-
-    private void setLikeIcon(@NotNull FirebaseAuth fbUser) {
-        Drawable likeIcon = getDrawable(this.song.isUserLiked(fbUser.getUid()) ? R.drawable.ic_like_clicked : R.drawable.ic_like);
-        this.song_ICN_like.setImageDrawable(likeIcon);
-        this.song_TXT_likesCount.setText("" + this.song.getRank());
-
-    }
-
-
-    private void updateChords() {
-        AtomicInteger index = new AtomicInteger();
-        ChordsUtils.formatChordsString(this.song.getChords(), "_", 0).forEach(s -> {
-            TextView textView = new TextView(this);
-            textView.setTextSize(18);
-            if (index.get() % 2 == 0) textView.setTextColor(Color.BLUE);
-            textView.setText(s);
-            Typeface typeface = ResourcesCompat.getFont(this, R.font.assistant);
-            textView.setTypeface(typeface);
-            song_LAY_chords.addView(textView);
-            index.getAndIncrement();
-        });
-        this.song_LAY_chords.setOnLongClickListener(v -> {
-            updateChordsFontSize(scale);
-            scale = scale == 1f ? 2f : 1f;
-            return true;
-        });
-    }
-
-    private void updateChordsFontSize(float mScaleFactor) {
-        Log.d("pttt", "updateChordsFontSize: " + mScaleFactor);
-        for (int i = 0; i < song_LAY_chords.getChildCount(); i++) {
-            TextView child = (TextView) (song_LAY_chords.getChildAt(i));
-            child.setTextSize(24 * mScaleFactor);
-        }
-    }
-
+    // Update Text Size by pinch and zoom
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
@@ -217,9 +232,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
             Log.d("pttt", "onScale: " + mScaleFactor);
 
             updateChordsFontSize(mScaleFactor);
-//            invalidate();
             return true;
         }
     }
-
 }

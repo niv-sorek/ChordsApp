@@ -2,7 +2,7 @@
     <string name="app_name">MusicApp</string>
     <string name="top_songs">My Playlists</string>
     <string name="liked_songs">Liked Songs</string>
-    <string name="title_activity_main" translatable="false">MainActivity</string>
+    <string name="title_activity_main" translatable="false">Chordy</string>
     <string name="sign_in_cancelled">Cancel</string>
     <string name="unknown_error">Unknown Error</string>
     <string name="no_internet_connection">No internet connection</string>
@@ -26,10 +26,11 @@
     <string name="artist_name" translatable="false">Artist Name</string>
     <string name="playlist_name" translatable="false">Playlist Name</string>
     <string name="search">Search</string>
-    <string name="applicationName" translatable="false">A-Chord</string>
+    <string name="applicationName" translatable="false">Chordy</string>
     <string name="name" translatable="false">Name</string>
     <string name="sign_up">Sign up</string>
     <string name="greeting" translatable="false">%s, %s</string>
+    <string name="traspose">Traspose:</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
