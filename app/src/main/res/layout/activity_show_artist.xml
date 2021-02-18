@@ -44,19 +44,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/top_songs"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/artist_LST_topSongs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="20dp"
             android:dividerHeight="2dp"
             android:scrollbars="none" />
     </LinearLayout>

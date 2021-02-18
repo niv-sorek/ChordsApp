@@ -11,12 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.boundaries.Artist;
 import com.example.musicapp.boundaries.Song;
 import com.example.musicapp.screens.ShowSong;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -26,11 +22,22 @@ public class SongsListAdapter extends BaseAdapter {
     final List<Song> songEntities;
     final Intent intent;
     private final Context context;
+    private boolean showAvatar = true;
 
     public SongsListAdapter(Context context, List<Song> songEntities) {
         this.context = context;
         this.songEntities = songEntities;
 
+
+        intent = new Intent(context, ShowSong.class);
+//        this.intent.putExtra("user", gson.toJson(user));
+        this.inflater = (LayoutInflater.from(context));
+    }
+
+    public SongsListAdapter(Context context, List<Song> songEntities, boolean showAvatar) {
+        this.context = context;
+        this.songEntities = songEntities;
+        this.showAvatar = showAvatar;
 
         intent = new Intent(context, ShowSong.class);
 //        this.intent.putExtra("user", gson.toJson(user));
@@ -62,7 +69,8 @@ public class SongsListAdapter extends BaseAdapter {
         songName.setText(this.songEntities.get(i).getName());
 
         artistName.setText(songEntities.get(i).getArtist().getName());
-        Glide.with(this.context).load(songEntities.get(i).getArtist().getImageURL()).circleCrop().into(avatar);
+        if (this.showAvatar)
+            Glide.with(this.context).load(songEntities.get(i).getArtist().getImageURL()).circleCrop().into(avatar);
         view.setOnClickListener(v -> {
             intent.putExtra("song", songEntities.get(i).getId());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

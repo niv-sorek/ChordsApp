@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     @Override
     protected void onResume() {
         super.onResume();
-        database.collection("users").document(this.connectedUser.getUid()).get().addOnSuccessListener(this::updateUserUI);
+        database.collection("users").document(this.connectedUser.getUid()).addSnapshotListener((v, e) -> updateUserUI(v));
     }
 
     @Override
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     }
 
     private void updateUserUI() {
-        database.collection("users").document(connectedUser.getUid()).get().addOnSuccessListener(v-> updateUserUI(v));
+        database.collection("users").document(connectedUser.getUid()).get().addOnSuccessListener(v -> updateUserUI(v));
     }
 
     private void setUserUI() {
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements Viewable {
         });
 
 
-        database.collection("users").document(this.connectedUser.getUid()).get().addOnSuccessListener(userDocument -> {
+        database.collection("users").document(this.connectedUser.getUid()).addSnapshotListener((userDocument, err) -> {
 
             ArrayList<Number> numbers = (ArrayList<Number>) userDocument.get("instruments");
             ArrayList<Integer> instruments = (ArrayList<Integer>) numbers.stream().map(Number::intValue).collect(Collectors.toList());
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements Viewable {
             this.connectedUser.setName(userDocument.getString("name"));
             this.main_TXT_greeting.setText(getString(R.string.greeting, getGreetByDayTime(), this.connectedUser.getName()));
             showInstrumentsIcons();
+            updateUserUI();
 
 
         });
@@ -179,6 +180,8 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     }
 
     private void showInstrumentsIcons() {
+
+         main_LAY_greeting.removeAllViewsInLayout();
 
         for (int i = 0; i < this.connectedUser.getInstruments().size(); i++) {
             ImageView imageView = new ImageView(this);
@@ -197,29 +200,34 @@ public class MainActivity extends AppCompatActivity implements Viewable {
     private void setLikedSongsList() {
 
         database.collection("songs").whereArrayContains("likes", this.connectedUser.getUid()).get().addOnSuccessListener(v -> {
-            this.connectedUser.setLikedSongs(v.getDocuments().stream().map(x->getSong((QueryDocumentSnapshot) x)).collect(Collectors.toList()));
+            this.connectedUser.setLikedSongs(v.getDocuments().stream().map(x -> getSong((QueryDocumentSnapshot) x)).collect(Collectors.toList()));
             initLikedSongsList(this.connectedUser.getLikedSongs());
         });
     }
 
     private void setPlaylists(DocumentSnapshot userDocument) {
         List<String> playlistsID = (List<String>) userDocument.get("playlists");
+        this.connectedUser.getPlaylists().clear();
         if (playlistsID != null && playlistsID.size() > 0) {
-            this.connectedUser.getPlaylists().clear();
             playlistsID.forEach(playlistID -> {
                 try {
-                    database.collection("playlists").document(playlistID).get().addOnSuccessListener(playlistRef -> {
+
+                    database.collection("playlists").document(playlistID).addSnapshotListener((playlistRef, error) -> {
                         Map<String, Object> playlistMap = playlistRef.getData();
-                        Playlist playlist = new Playlist().setName(playlistMap.get("name").toString());
-                        playlist.setId(playlistRef.getId());
-                        //noinspection unchecked
+                        Optional<Playlist> oPlaylist = this.connectedUser.getPlaylists().stream().filter(x -> x.getId().equals(playlistRef.getId())).findFirst();
+                        Playlist playlist;
+                        if (oPlaylist.isPresent()) playlist = oPlaylist.get();
+                        else {
+                            playlist = new Playlist().setName(playlistMap.get("name").toString());
+                            playlist.setId(playlistRef.getId());
+                            this.connectedUser.getPlaylists().add(playlist);
+                        }//noinspection unchecked
                         List<String> playlistSongs = (List<String>) playlistMap.get("songs");
 
-                        this.connectedUser.getPlaylists().add(playlist);
                         assert playlistSongs != null;
                         if (playlistSongs.size() > 0) {
                             database.collection("songs").whereIn(FieldPath.documentId(), playlistSongs).get().addOnSuccessListener(playlistSongsRefs -> {
-                                playlist.setSongs(playlistSongsRefs.getDocuments().stream().map(x->getSong((QueryDocumentSnapshot) x)).collect(Collectors.toList()));
+                                playlist.setSongs(playlistSongsRefs.getDocuments().stream().map(x -> getSong((QueryDocumentSnapshot) x)).collect(Collectors.toList()));
                                 this.main_LST_topSongs.setAdapter(new PlaylistListAdapter(this, this.connectedUser.getPlaylists()));
                             });
                         }

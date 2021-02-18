@@ -44,6 +44,7 @@ public class ShowPlaylist extends AppCompatActivity {
     private ListView playlist_LST_songs;
     private ImageView playlist_IMG_share;
     private ImageView playlist_IMG_addSong;
+    private ImageView playlist_IMG_remove;
     private TextInputLayout playlist_INP_search;
     private LinearLayout playlist_LAY_input;
     private AutoCompleteTextView editText;
@@ -67,16 +68,20 @@ public class ShowPlaylist extends AppCompatActivity {
         this.playlist_INP_search = findViewById(R.id.playlist_INP_search);
         this.playlist_LAY_input = findViewById(R.id.playlist_LAY_input);
         this.playlist_LST_songs = findViewById(R.id.playlist_LST_songs);
+        this.playlist_IMG_remove = findViewById(R.id.playlist_IMG_remove);
     }
 
     private void initViews() {
 
         this.playlist_LAY_input.setVisibility(View.INVISIBLE);
         this.playlist_TXT_name.setText(this.playlist.getName());
+        database.collection("playlists").document(this.playlist.getId()).addSnapshotListener((v, e)->
+        {
+
+        });
         this.playlist_LST_songs.setAdapter(new SongsListAdapter(this, this.playlist.getSongs()));
 
-        this.playlist_IMG_share.setOnClickListener(v ->
-        {
+        this.playlist_IMG_share.setOnClickListener(v -> {
             this.playlist_INP_search.setHint("Search User");
             this.searchType = SEARCH.Users;
             updateUI();
@@ -86,24 +91,25 @@ public class ShowPlaylist extends AppCompatActivity {
             this.searchType = SEARCH.Songs;
             updateUI();
         });
+        this.playlist_IMG_remove.setOnClickListener(v->
+        {
+            FirebaseUser user =  FirebaseAuth.getInstance().getCurrentUser();
+            database.collection("users").document(user.getUid()).update("playlists", FieldValue.arrayRemove(this.playlist.getId()));
+            finish();
+        });
 
         this.editText = (AutoCompleteTextView) this.playlist_INP_search.getEditText();
 
         editText.setOnItemClickListener((parent, view, position, id) -> {
 
             // Close Keyboard
-            InputMethodManager inputManager =
-                    (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
             View view1 = this.getCurrentFocus();
 
             if (view1 != null) {
-
-                this.getWindow()
-                        .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-                inputManager.hideSoftInputFromWindow(view1
-                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                inputManager.hideSoftInputFromWindow(view1.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
             this.playlist_INP_search.getEditText().setText("");
             /// ---------------------------------------------------------------------------------
@@ -111,40 +117,27 @@ public class ShowPlaylist extends AppCompatActivity {
             if (searchType == SEARCH.Songs) {
                 Song item = (Song) ((ListItem) parent.getAdapter().getItem(position)).getData();
 
-                database.collection("playlists").document(playlist.getId())
-                        .update("songs", FieldValue.arrayUnion(item.getId()));
-                database.collection("artists").document(item.getArtistId()).get()
-                        .addOnSuccessListener(artistDoc -> {
-                            Artist artist = artistDoc.toObject(Artist.class);
-                            item.setArtist(artist);
-                            playlist.getSongs().add(item);
-                            initViews();
-                            Toast t = Toast.makeText(this, parent
-                                    .getAdapter().getItem(position)
-                                    .toString() + "Added to playlist " + playlist
-                                    .getName(), Toast.LENGTH_LONG);
-                            t.show();
-                        });
+                database.collection("playlists").document(playlist.getId()).update("songs", FieldValue.arrayUnion(item.getId()));
+                database.collection("artists").document(item.getArtistId()).get().addOnSuccessListener(artistDoc -> {
+                    Artist artist = artistDoc.toObject(Artist.class);
+                    item.setArtist(artist);
+                    playlist.getSongs().add(item);
+                    initViews();
+                    Toast t = Toast.makeText(this, parent.getAdapter().getItem(position).toString() + "Added to playlist " + playlist.getName(), Toast.LENGTH_LONG);
+                    t.show();
+                });
             } else if (searchType == SEARCH.Users) {
-                String userId =
-                        (String) ((ListItem) parent.getAdapter().getItem(position)).getData();
-                database.collection("users").document(userId)
-                        .update("playlists", FieldValue.arrayUnion(playlist.getId()))
-                        .addOnSuccessListener(v ->
-                        {
-                            Toast t = Toast.makeText(this, "Playlist shared With " + parent
-                                    .getAdapter().getItem(position).toString(), Toast.LENGTH_LONG);
-                            t.show();
-                        });
+                String userId = (String) ((ListItem) parent.getAdapter().getItem(position)).getData();
+                database.collection("users").document(userId).update("playlists", FieldValue.arrayUnion(playlist.getId())).addOnSuccessListener(v -> {
+                    Toast t = Toast.makeText(this, "Playlist shared With " + parent.getAdapter().getItem(position).toString(), Toast.LENGTH_LONG);
+                    t.show();
+                });
             }
-
         });
     }
 
-
     private void updateUI() {
-        this.playlist_LAY_input.setVisibility(this.playlist_LAY_input
-                .getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+        this.playlist_LAY_input.setVisibility(this.playlist_LAY_input.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
         if (this.searchType == SEARCH.Songs) {
             updateUISearchSong();
         } else if (searchType == SEARCH.Users) {
@@ -155,12 +148,7 @@ public class ShowPlaylist extends AppCompatActivity {
     private void updateUISearchUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         database.collection("users").get().addOnSuccessListener(v -> {
-            ArrayAdapter<ListItem> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_dropdown_item_1line, v.getDocuments()
-                    .stream().filter(x -> !x.getId().equals(user.getUid())
-                    )
-                    .map(x -> new ListItem(x.getString("name"), x.getId()))
-                    .collect(Collectors.toList()));
+            ArrayAdapter<ListItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, v.getDocuments().stream().filter(x -> !x.getId().equals(user.getUid())).map(x -> new ListItem(x.getString("name"), x.getId())).collect(Collectors.toList()));
 
             editText.setAdapter(adapter);
 
@@ -171,18 +159,11 @@ public class ShowPlaylist extends AppCompatActivity {
     private void updateUISearchSong() {
         database.collection("songs").get().addOnSuccessListener(v -> {
 
-            List<ListItem> items = v.getDocuments().stream()
-                    .map(x -> {
-                        return new ListItem(x.getString("name") + " - " + MainActivity.artistsList
-                                .stream()
-                                .filter(a -> a.getId().equals(x.getString("artistId"))).findFirst()
-                                .get()
-                                .getName(), x.toObject(Song.class));
-                    })
-                    .collect(Collectors.toList());
+            List<ListItem> items = v.getDocuments().stream().map(x -> {
+                return new ListItem(x.getString("name") + " - " + MainActivity.artistsList.stream().filter(a -> a.getId().equals(x.getString("artistId"))).findFirst().get().getName(), x.toObject(Song.class));
+            }).collect(Collectors.toList());
 
-            ArrayAdapter<ListItem> adapter =
-                    new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, items);
+            ArrayAdapter<ListItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, items);
             editText.setAdapter(adapter);
 
 

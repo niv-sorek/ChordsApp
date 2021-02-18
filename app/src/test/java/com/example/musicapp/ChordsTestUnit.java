@@ -25,7 +25,7 @@ public class ChordsTestUnit {
     @Test
     public void TestFromUG() {
         String raw = "b    Bb/D      Cm         Fm           Eaug Ab/Eb   Dm7b5\n" + "Mama, ooh_________  didn't mean to make you  cry.\n" + "   Bb7                            Eb               Bb/D         Cm\n" + "If I'm not back again this time tomorrow, car - ry on, car - ry on\n" + "      Abm            Eb          Ab   Eb   Ebdim   Fm7   Bb\n" + "as if nothing really matters.";
-        System.out.println(ChordsUtils.fromUltimateGuitar(raw));
+      //  System.out.println(ChordsUtils.fromUltimateGuitar(raw));
 
     }
 }

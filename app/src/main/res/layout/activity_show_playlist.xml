@@ -36,8 +36,16 @@
         <ImageView
             android:id="@+id/playlist_IMG_share"
             android:layout_width="35dp"
+            android:layout_marginEnd="50dp"
+
             android:layout_height="35dp"
             android:src="@drawable/ic_share" />
+        <ImageView
+            android:id="@+id/playlist_IMG_remove"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_rubbish_bin" />
+
     </LinearLayout>
 
     <LinearLayout

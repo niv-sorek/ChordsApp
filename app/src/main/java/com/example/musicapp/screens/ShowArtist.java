@@ -69,7 +69,7 @@ public class ShowArtist extends AppCompatActivity implements Viewable {
                 this.artist_RATE_rating.setProgress(this.artist.getRank());
                 this.artist_SPN_spinner.setVisibility(View.INVISIBLE);
                 artist_LAY_details.setVisibility(View.VISIBLE);
-                this.artist_LST_topSongs.setAdapter(new SongsListAdapter(this, this.artist.getSongs()));
+                this.artist_LST_topSongs.setAdapter(new SongsListAdapter(this, this.artist.getSongs(), false));
             });
         });
     }
