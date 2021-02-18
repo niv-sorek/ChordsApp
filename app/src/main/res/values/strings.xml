@@ -1,12 +1,5 @@
 <resources>
     <string name="app_name">MusicApp</string>
-    <string name="lorem_ipsum" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate ex et diam ultrices volutpat. In interdum dui at feugiat lacinia. Cras lectus nunc, iaculis vel elit vitae, tempor eleifend magna. Ut augue mi, sollicitudin ut risus bibendum, vehicula laoreet massa. Nunc porttitor sit amet neque id tristique. Aliquam felis nibh, dignissim in quam scelerisque, laoreet luctus leo. Duis tempor velit quis arcu suscipit, id sagittis dolor vestibulum. Cras sit amet purus elit. Suspendisse mollis est ut diam rhoncus, ac tempus enim porttitor. In ligula lacus, volutpat ut libero sit amet, aliquet auctor dui. Vestibulum placerat laoreet sollicitudin. Donec sit amet risus eget odio fringilla rhoncus a sed sapien. Integer volutpat, velit a viverra imperdiet, erat mauris finibus elit, ut sollicitudin leo diam id sapien. Nulla iaculis, magna interdum elementum blandit, tortor dolor tincidunt libero, at imperdiet lorem massa ac felis. Quisque sit amet est blandit, facilisis leo in, gravida sapien.
-
-Pellentesque posuere, quam sit amet gravida tincidunt, ipsum ex consectetur purus, eget sodales nibh neque quis purus. Aliquam a augue aliquam arcu vehicula convallis. Etiam ultrices lorem ut maximus finibus. Nullam accumsan sodales libero. Sed bibendum, mi ut vehicula fermentum, tortor nulla congue est, in consectetur sem ipsum ut mauris. Sed gravida lorem mi, non eleifend dolor rhoncus nec. In cursus lectus mi, eget varius ante gravida ut. Duis eu varius urna. Donec neque leo, porttitor sed augue quis, congue feugiat leo. Mauris aliquet libero at fringilla imperdiet. Donec elit mauris, ultrices eget neque at, ultricies efficitur purus.
-
-Vestibulum quis est vel mi rhoncus pharetra. Fusce id dolor mattis, laoreet sem eu, rhoncus enim. Maecenas viverra ornare arcu, eget consequat urna faucibus et. Fusce vitae volutpat augue. Pellentesque porta risus vel libero convallis vehicula. Integer ut urna venenatis, lacinia velit sed, dignissim sem. Nulla dui orci, elementum eu vulputate et, dictum lacinia turpis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec luctus lectus quis nibh fringilla, nec pharetra elit posuere. Donec ut orci non quam tristique egestas. Sed scelerisque ex nec arcu sollicitudin efficitur. Nam congue dignissim erat, a imperdiet ipsum maximus sit amet. Quisque ac iaculis odio.
-
-Sed quis tortor nec tortor dapibus elementum. Sed ultricies nulla at mi efficitur, eget ultricies mi accumsan. Curabitur ullamcorper, tellus in posuere mattis, tortor libero porta arcu, nec dictum dui dui non turpis. Suspendisse vel varius lacus. Sed sit amet finibus mauris, vel sodales massa. Morbi volutpat cursus mauris, eu iaculis orci fringilla eu. Vestibulum vitae lacus ut elit molestie eleifend. Nulla vitae ullamcorper neque. Maecenas sodales euismod bibendum. Ut molestie lacinia ultricies. Proin efficitur aliquet arcu eget varius. Nunc sit amet lorem sit amet urna ornare tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis tellus, pretium non ligula in, vehicula tempor tellus.</string>
     <string name="top_songs">My Playlists</string>
     <string name="liked_songs">Liked Songs</string>
     <string name="title_activity_main" translatable="false">MainActivity</string>
@@ -15,16 +8,28 @@ Sed quis tortor nec tortor dapibus elementum. Sed ultricies nulla at mi efficitu
     <string name="no_internet_connection">No internet connection</string>
     <string name="good_night">Good Night</string>
     <string name="good_afternoon">"Good Afternoon"</string>
-    <string name="hello">Hello</string>
-    <string name="user_s_profile_photo">User\'s profile photo</string>
-    <string name="songname">SongName</string>
+    <string name="songName">SongName</string>
     <string name="artist">Artist</string>
-    <string name="jj">Hello</string>
     <string name="playlistName">Playlist Name</string>
     <string name="acoustic_guitar">Acoustic Guitar</string>
     <string name="keyboard">Keyboard</string>
     <string name="bass">Bass</string>
     <string name="saxophone">Saxophone</string>
+    <string name="search_song">Search Song</string>
+    <string name="electric_guitar">Electric Guitar</string>
+    <string name="drums">Drums</string>
+    <string name="mic">Singer</string>
+    <string name="new_playlist">Create New Playlist</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="hello">Hello</string>
+    <string name="artist_name" translatable="false">Artist Name</string>
+    <string name="playlist_name" translatable="false">Playlist Name</string>
+    <string name="search">Search</string>
+    <string name="applicationName" translatable="false">A-Chord</string>
+    <string name="name" translatable="false">Name</string>
+    <string name="sign_up">Sign up</string>
+    <string name="greeting" translatable="false">%s, %s</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

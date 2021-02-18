@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingTop="10dp"
-    tools:context=".screens.ShowArtist$SongListItem">
+    tools:context=".screens.SongListItem">
 
     <ImageView
 
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_weight="1"
-        android:text="Song name"
         android:textFontWeight="600"
         android:gravity="center"
         android:textSize="18sp" />
@@ -31,6 +30,5 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:textFontWeight="100"
-        android:text="Artist name"
         android:textSize="17sp" />
 </LinearLayout>

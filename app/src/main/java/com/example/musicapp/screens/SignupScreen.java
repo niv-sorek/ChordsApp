@@ -2,13 +2,13 @@ package com.example.musicapp.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicapp.R;
+import com.example.musicapp.Utils;
 import com.example.musicapp.boundaries.Instrument;
 import com.example.musicapp.boundaries.User;
 import com.google.android.material.chip.Chip;
@@ -26,6 +26,7 @@ public class SignupScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Utils.setFullScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
         findViews();
@@ -62,8 +63,5 @@ public class SignupScreen extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
-
     }
-
 }

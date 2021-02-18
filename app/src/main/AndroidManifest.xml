@@ -7,18 +7,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic__acoustic_guitar"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic__acoustic_guitar"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicApp">
-        <activity android:name=".screens.SignupScreen"></activity>
-        <activity android:name=".screens.ShowPlaylist" />
-        <activity android:name=".playlistItem" />
-        <activity android:name=".screens.LoginActivity" />
-        <activity android:name=".screens.MainActivity" />
+
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -35,17 +32,32 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
+            android:name=".screens.SignupScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screens.ShowPlaylist"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screens.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screens.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screens.ShowSong"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screens.ShowArtist"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".screens.Splash"
-            android:label="@string/title_activity_main">
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screens.SongListItem" />
-        <activity android:name=".screens.ShowSong" />
-        <activity android:name=".screens.ShowArtist" />
     </application>
 
 </manifest>

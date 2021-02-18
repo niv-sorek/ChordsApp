@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingTop="10dp"
-    tools:context=".screens.ShowArtist$SongListItem">
+    tools:context=".screens.SongListItem">
 
     <TextView
         android:id="@+id/playlist_TXT_name"
@@ -24,6 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:textFontWeight="500"
-        android:text="0"
+        android:text=""
         android:textSize="17sp" />
 </LinearLayout>

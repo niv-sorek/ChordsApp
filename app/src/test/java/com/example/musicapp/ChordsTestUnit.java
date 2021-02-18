@@ -17,7 +17,7 @@ public class ChordsTestUnit {
 
         String rawChords = "Hello {0,m}World_How ar{1,m}e you?_Merav Ash{2,Maj7}erian";
         List<String> strings = ChordsUtils.formatChordsString(rawChords, "_", 1);
-        strings.forEach(s -> System.out.println(s));
+        strings.forEach(System.out::println);
 
         assertEquals((rawChords.chars().filter(c -> c == '_').count() + 1) * 2, strings.size());
     }

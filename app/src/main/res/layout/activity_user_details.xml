@@ -28,7 +28,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Name" />
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -42,16 +44,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1
-" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/signup_BTN_OK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="140dp"
-            android:text="Sign up"
+            android:text="@string/sign_up"
             android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

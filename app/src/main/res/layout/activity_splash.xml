@@ -27,7 +27,7 @@
             android:scaleX="0.2"
 
             android:scaleY="0.2"
-            android:text="A-Chord"
+            android:text="@string/applicationName"
             android:textColor="@color/black"
             android:textSize="78sp" />
     </LinearLayout>

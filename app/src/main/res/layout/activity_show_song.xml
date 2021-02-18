@@ -39,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:text="@string/songname"
+                    android:text="@string/songName"
                     android:textFontWeight="900"
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp"
@@ -49,7 +49,6 @@
                     android:id="@+id/song_TXT_artistName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/song_TXT_songName"
                     android:layout_marginBottom="30dp"
                     android:text="@string/artist"
                     android:textColor="#FF0000FF"
@@ -57,10 +56,8 @@
                     android:textSize="25sp" />
 
                 <LinearLayout
-                    android:id="@+id/song_LAY_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/song_TXT_artistName"
                     android:layout_marginBottom="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -76,7 +73,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:text="Hello"
                         android:textSize="20sp" />
 
 
@@ -86,19 +82,9 @@
                     android:id="@+id/song_LAY_chords"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/song_LAY_rating"
 
                     android:orientation="vertical">
-                    >
 
-                    <!--                <TextView-->
-                    <!--                    android:id="@+id/song_TXT_chords"-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="wrap_content"-->
-                    <!--                    android:layout_marginTop="20dp"-->
-                    <!--                    android:layout_marginBottom="20dp"-->
-                    <!--                    android:text="@string/lorem_ipsum"-->
-                    <!--                    android:textSize="18sp" />-->
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

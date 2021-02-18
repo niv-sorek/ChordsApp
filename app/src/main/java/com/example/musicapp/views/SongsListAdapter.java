@@ -25,11 +25,7 @@ public class SongsListAdapter extends BaseAdapter {
     final LayoutInflater inflater;
     final List<Song> songEntities;
     final Intent intent;
-    final Gson gson = new Gson();
     private final Context context;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef;
-    Artist a;
 
     public SongsListAdapter(Context context, List<Song> songEntities) {
         this.context = context;

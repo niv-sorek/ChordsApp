@@ -9,11 +9,20 @@
     <string name="good_night">לילה טוב</string>
     <string name="good_afternoon">אחר הצהריים טובים</string>
     <string name="hello">שלום</string>
-    <string name="user_s_profile_photo">תמונת פרופילל</string>
-    <string name="songname">שם השיר</string>
+    <string name="songName">שם השיר</string>
     <string name="artist">אמן</string>
     <string name="acoustic_guitar">גיטרה אקוסטית</string>
     <string name="keyboard">קלידים</string>
     <string name="bass">בס</string>
     <string name="saxophone">סקסופון</string>
+    <string name="playlistName">שם הרשימה</string>
+    <string name="search_song">חיפוש שיר</string>
+    <string name="electric_guitar">גיטרה חשמלית</string>
+    <string name="drums">תופים</string>
+    <string name="mic">שירה</string>
+    <string name="ok">אישור</string>
+    <string name="new_playlist">צור פלייליסט חדש</string>
+    <string name="cancel">ביטול</string>
+    <string name="sign_up">הרשמה</string>
+    <string name="search">חיפוש</string>
 </resources>

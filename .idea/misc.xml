@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.example.musicapp.boundaries.Song id" />
+    </entry_points>
+    <pattern value="com.example.musicapp.boundaries.Song" method="isUserLiked" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="like" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="setArtistId" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="setChords" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="setLikes" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="setName" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="setRtl" />
+    <pattern value="com.example.musicapp.boundaries.Song" />
+    <pattern value="com.example.musicapp.boundaries.Song" method="toggleLike" />
+    <pattern value="com.example.musicapp.boundaries.Playlist" method="getCreatorId" />
+    <pattern value="com.example.musicapp.boundaries.Playlist" />
+    <pattern value="com.example.musicapp.boundaries.Playlist" method="setSongs" />
+    <pattern value="com.example.musicapp.boundaries.User" method="getFriends" />
+    <pattern value="com.example.musicapp.boundaries.User" method="getPhone" />
+    <pattern value="com.example.musicapp.boundaries.User" method="setFriends" />
+    <pattern value="com.example.musicapp.boundaries.User" method="setLikedSongs" />
+    <pattern value="com.example.musicapp.boundaries.User" method="setPhone" />
+    <pattern value="com.example.musicapp.boundaries.User" method="setPlaylists" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

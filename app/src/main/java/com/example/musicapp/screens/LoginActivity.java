@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicapp.R;
+import com.example.musicapp.Utils;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -19,25 +20,23 @@ import java.util.Arrays;
 
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "pttt";
     private static final int RC_SIGN_IN = 1234;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Utils.setFullScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         if (user != null) {
-            database.collection("users").document(user.getUid()).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.getString("name").length() != 0) {
-                            openApp();
-                        } else
-                            startLoginMethod();
-                    });
+            database.collection("users").document(user.getUid()).get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists() && documentSnapshot.getString("name").length() != 0) {
+                    openApp();
+                } else startLoginMethod();
+            });
         } else {
             startLoginMethod();
         }
@@ -46,24 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private void startLoginMethod() {
         Log.d("pttt", "startLoginMethod");
 
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(Arrays.asList(
-                                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                new AuthUI.IdpConfig.TwitterBuilder().build(),
-                                new AuthUI.IdpConfig.AppleBuilder().build(),
-                                new AuthUI.IdpConfig.EmailBuilder().build(),
-                                new AuthUI.IdpConfig.PhoneBuilder().build(),
-                                new AuthUI.IdpConfig.AnonymousBuilder().build()
-                        ))
-                        .setLogo(R.drawable.ic_guitar)
-                        .setTosAndPrivacyPolicyUrls(
-                                "https://example.com/terms.html",
-                                "https://example.com/privacy.html")
-                        .setTheme(R.style.LoginTheme)
-                        .build(),
-                RC_SIGN_IN);
+        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.TwitterBuilder().build(), new AuthUI.IdpConfig.AppleBuilder().build(), new AuthUI.IdpConfig.EmailBuilder().build(), new AuthUI.IdpConfig.PhoneBuilder().build(), new AuthUI.IdpConfig.AnonymousBuilder().build())).setLogo(R.drawable.ic_guitar).setTosAndPrivacyPolicyUrls("https://example.com/terms.html", "https://example.com/privacy.html").setTheme(R.style.LoginTheme).build(), RC_SIGN_IN);
     }
 
     private void openApp() {

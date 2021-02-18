@@ -9,12 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.musicapp.R;
-import com.example.musicapp.boundaries.Artist;
 import com.example.musicapp.boundaries.Playlist;
 import com.example.musicapp.screens.ShowPlaylist;
-import com.example.musicapp.screens.ShowSong;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -23,11 +19,7 @@ import java.util.List;
 public class PlaylistListAdapter extends BaseAdapter {
     final LayoutInflater inflater;
     final List<Playlist> playlists;
-    final Gson gson = new Gson();
     private final Context context;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef;
-    Artist a;
 
     public PlaylistListAdapter(Context context, List<Playlist> playlists) {
         this.context = context;
@@ -65,8 +57,6 @@ public class PlaylistListAdapter extends BaseAdapter {
             intent.putExtra("playlist", new Gson().toJson(getItem(i)));
             context.startActivity(intent);
         });
-
         return view;
-
     }
 }

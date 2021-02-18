@@ -34,8 +34,6 @@ import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class ShowSong extends AppCompatActivity implements Viewable {
 
-    private float mPosX;
-    private float mPosY;
     private float mLastTouchX;
     private float mLastTouchY;
     private int mActivePointerId = INVALID_POINTER_ID;
@@ -102,10 +100,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
                     final float dx = x - mLastTouchX;
                     final float dy = y - mLastTouchY;
 
-                    mPosX += dx;
-                    mPosY += dy;
-
-//                    invalidate();
+                    //                    invalidate();
                 }
 
                 mLastTouchX = x;
@@ -122,8 +117,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
             }
 
             case MotionEvent.ACTION_POINTER_UP: {
-                final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK)
-                        >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
                 final int pointerId = ev.getPointerId(pointerIndex);
                 if (pointerId == mActivePointerId) {
                     // This was our active pointer going up. Choose a new
@@ -152,7 +146,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
             song_TXT_songName.setText(song.getName());
             FirebaseAuth fbUser = FirebaseAuth.getInstance();
             setLikeIcon(fbUser);
-            this.song_ICN_like.setOnClickListener(v->{
+            this.song_ICN_like.setOnClickListener(v -> {
                 song.toggleLike(fbUser.getUid());
                 database.collection("songs").document(songId).update("likes", song.getLikes());
                 setLikeIcon(fbUser);
@@ -165,7 +159,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
             String artistId = songSnapshot.getString("artistId");
             database.collection("artists").document(artistId).get().addOnSuccessListener(artistSnapshot -> {
                 song.setArtist(artistSnapshot.toObject(Artist.class));
-                song_TXT_artistName.setText("" + song.getArtist().getName());
+                song_TXT_artistName.setText(song.getArtist().getName());
                 this.song_TXT_artistName.setOnClickListener(v -> {
                     Intent intent = new Intent(this, ShowArtist.class);
                     intent.putExtra("artistId", artistId);
@@ -191,8 +185,7 @@ public class ShowSong extends AppCompatActivity implements Viewable {
         ChordsUtils.formatChordsString(this.song.getChords(), "_", 0).forEach(s -> {
             TextView textView = new TextView(this);
             textView.setTextSize(18);
-            if (index.get() % 2 == 0)
-                textView.setTextColor(Color.BLUE);
+            if (index.get() % 2 == 0) textView.setTextColor(Color.BLUE);
             textView.setText(s);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.assistant);
             textView.setTypeface(typeface);

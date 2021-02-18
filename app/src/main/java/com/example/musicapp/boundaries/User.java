@@ -16,7 +16,8 @@ public class User {
     private List<Song> likedSongEntities = new ArrayList<>();
     @Exclude
     private List<Playlist> playlists = new ArrayList<>();
-    private ArrayList<Number> instruments = new ArrayList<>();
+    @Exclude
+    private ArrayList<Integer> instruments;
     @DocumentId
     private String uid;
 
@@ -70,11 +71,11 @@ public class User {
         return this;
     }
 
-    public ArrayList<Number> getInstruments() {
+    public ArrayList<Integer> getInstruments() {
         return instruments;
     }
 
-    public User setInstruments(ArrayList<Number> instruments) {
+    public User setInstruments(ArrayList<Integer> instruments) {
         this.instruments = instruments;
         return this;
     }

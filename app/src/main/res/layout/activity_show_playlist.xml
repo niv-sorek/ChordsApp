@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/assistant_bold_font"
-        android:text="Playlist Name"
+        android:text="@string/playlist_name"
         android:textFontWeight="400"
         android:textSize="35sp"
         android:textStyle="bold" />
@@ -44,30 +44,22 @@
         android:id="@+id/playlist_LAY_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/playlist_LAY_actions">
+        android:layout_below="@id/playlist_LAY_actions"
+        android:layout_centerHorizontal="true">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/playlist_INP_search"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/playlist_INP_search"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:ems="10"
-                android:hint="Search" />
+                android:hint="@string/search" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/playlist_BTN_ok"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_marginStart="15dp"
-            android:text="OK" />
     </LinearLayout>
 
     <ListView

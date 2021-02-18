@@ -1,26 +1,26 @@
 package com.example.musicapp;
 
+import android.os.Build;
+
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ChordsUtils {
     public static List<String> formatChordsString(String rawString, String delimiter, int scale) {
         String[] splitted = rawString.split(delimiter);
-        //Arrays.stream(splitted).forEach(s -> System.out.println(s));
         List<String> chordsList = new ArrayList<>();
-        //chordsList.add(0, "");
 
-        for (int i = 0; i < splitted.length; i++) {
+        for (String s : splitted) {
             chordsList.add("");
-            chordsList.add(splitted[i]);
+            chordsList.add(s);
         }
         for (int line = 1; line < chordsList.size(); line = line + 2) {
             if (chordsList.get(line).indexOf('{') >= 0) {
-            List<String> splitLine = new ArrayList<String>(Arrays.asList(chordsList.get(line).split("[{}]")));
+            List<String> splitLine =
+                    new ArrayList<>(Arrays.asList(chordsList.get(line).split("[{}]")));
                 int firstChord = chordsList.get(line).indexOf('{') > 0 ? 1 : 0;
                 for (int part = firstChord; part < splitLine.size(); part += 2) {
                     String chord = getChord(splitLine.get(part), scale);
@@ -30,7 +30,9 @@ public class ChordsUtils {
                     chordsList.set(line - 1, chordsList.get(line - 1) + Strings.repeat(" ", spaces) + chord);
                     splitLine.remove(part);
                 }
-            chordsList.set(line, splitLine.stream().collect(Collectors.joining("")));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    chordsList.set(line, String.join("", splitLine));
+                }
             }
 
         }
