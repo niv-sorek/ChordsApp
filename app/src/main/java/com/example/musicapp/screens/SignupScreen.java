@@ -59,9 +59,12 @@ public class SignupScreen extends AppCompatActivity {
             connectedUser.getInstruments().addAll(this.signup_CHP_instruments.getCheckedChipIds());
             Intent intent = new Intent(SignupScreen.this, MainActivity.class);
             FirebaseFirestore database = FirebaseFirestore.getInstance();
-            database.collection("users").document(connectedUser.getUid()).set(connectedUser);
+            database.collection("users").document(connectedUser.getUid()).set(connectedUser).addOnCompleteListener(c->
+            {
             startActivity(intent);
-            finish();
+                finish();
+
+            });
         });
     }
 }

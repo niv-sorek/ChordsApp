@@ -45,7 +45,12 @@ public class LoginActivity extends AppCompatActivity {
     private void startLoginMethod() {
         Log.d("pttt", "startLoginMethod");
 
-        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.TwitterBuilder().build(), new AuthUI.IdpConfig.AppleBuilder().build(), new AuthUI.IdpConfig.EmailBuilder().build(), new AuthUI.IdpConfig.PhoneBuilder().build(), new AuthUI.IdpConfig.AnonymousBuilder().build())).setLogo(R.drawable.ic_guitar).setTosAndPrivacyPolicyUrls("https://example.com/terms.html", "https://example.com/privacy.html").setTheme(R.style.LoginTheme).build(), RC_SIGN_IN);
+        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.TwitterBuilder().build(),
+                new AuthUI.IdpConfig.AppleBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build())).setLogo(R.drawable.ic_guitar).setTosAndPrivacyPolicyUrls("https://example.com/terms.html", "https://example.com/privacy.html").setTheme(R.style.Theme_AppCompat).build(), RC_SIGN_IN);
     }
 
     private void openApp() {
